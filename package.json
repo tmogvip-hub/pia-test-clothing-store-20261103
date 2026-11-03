@@ -1,0 +1,18 @@
+{
+  "name": "aura-studio",
+  "version": "1.0.0",
+  "description": "AURA STUDIO — Minimal & Everyday Wear Online Clothing Store",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "clothing-store",
+    "ecommerce",
+    "minimal-wear",
+    "everyday-fashion",
+    "aura-studio"
+  ],
+  "author": "AURA STUDIO",
+  "license": "MIT"
+}

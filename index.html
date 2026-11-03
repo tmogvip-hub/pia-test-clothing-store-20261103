@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA STUDIO — Minimal & Everyday Wear</title>
+  <meta name="description" content="เสื้อผ้าสไตล์มินิมอลและ Everyday Wear ในโทนสีอบอุ่น Warm Sand & Oatmeal สวมใส่ง่าย เข้ากับทุกวันอย่างเป็นธรรมชาติ">
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    จัดส่งฟรีทั่วประเทศ เมื่อสั่งซื้อครบ <strong>฿1,500</strong> | ใส่โค้ด <strong>AURA10</strong> รับส่วนลด 10%
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#" class="brand-logo" aria-label="AURA STUDIO หน้าหลัก">
+        <span class="brand-name">AURA STUDIO</span>
+        <span class="brand-tagline">Everyday Living & Minimal Wear</span>
+      </a>
+
+      <nav class="site-nav" aria-label="เมนูหลัก">
+        <a href="#collection" class="nav-link">คอลเลกชันใหม่</a>
+        <a href="#philosophy" class="nav-link">แนวคิดของแบรนด์</a>
+        <a href="#lookbook" class="nav-link">Lookbook</a>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="btn-cart-trigger" id="btn-open-cart" aria-label="เปิดตะกร้าสินค้า">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span>ตะกร้า</span>
+          <span class="cart-badge is-hidden" id="cart-badge-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="hero-tag">Everyday Capsule 2026</span>
+        <h1 class="hero-title">
+          ความเรียบง่ายที่สวมใส่ได้จริง <em>ในทุกจังหวะชีวิต</em>
+        </h1>
+        <p class="hero-desc">
+          คอลเลกชันเสื้อผ้าที่ผ่านการเลือกสรรเส้นใยธรรมชาติและเฉดสี Warm Sand & Oatmeal เพื่อให้คุณรู้สึกผ่อนคลาย สบายตัว และคงความสง่างามเหนือกาลเวลา
+        </p>
+        <div class="hero-actions">
+          <a href="#collection" class="btn btn-primary">สำรวจสินค้าทั้งหมด</a>
+          <a href="#philosophy" class="btn btn-outline">เรื่องราวของแบรนด์</a>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <div class="hero-card">
+          <div class="hero-card-art">
+            <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 200px; height: 240px;">
+              <path d="M70 42 L100 62 L130 42 L162 70 L146 102 L132 94 L132 198 L68 198 L68 94 L54 102 L38 70 Z" fill="#E8DEC8" stroke="#8D7A65" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M100 62 L100 198" stroke="#8D7A65" stroke-width="1.8" stroke-dasharray="3 3"/>
+              <path d="M85 45 C95 56 105 56 115 45" stroke="#685545" stroke-width="2" fill="none"/>
+              <circle cx="100" cy="95" r="2.5" fill="#5A4738"/>
+              <circle cx="100" cy="125" r="2.5" fill="#5A4738"/>
+              <circle cx="100" cy="155" r="2.5" fill="#5A4738"/>
+            </svg>
+          </div>
+          <div class="hero-card-caption">
+            <div>
+              <div class="caption-label">Signature Piece</div>
+              <div class="caption-value">Linen Blend Shirt</div>
+            </div>
+            <span class="product-tag">฿1,290</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Props -->
+  <section class="value-props">
+    <div class="value-props-container">
+      <div class="value-item">
+        <div class="value-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <h4 class="value-title">เส้นใยธรรมชาติ 100%</h4>
+          <p class="value-desc">คัดสรร French Linen และ Organic Cotton ปลอดสารเคมีตกค้าง</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        </div>
+        <div>
+          <h4 class="value-title">จัดส่งด่วนฟรีเมื่อครบ ฿1,500</h4>
+          <p class="value-desc">แพ็กด้วยกล่องกระดาษรีไซเคิล ย่อยสลายได้ เป็นมิตรต่อสิ่งแวดล้อม</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </div>
+        <div>
+          <h4 class="value-title">เปลี่ยนไซส์ได้ใน 14 วัน</h4>
+          <p class="value-desc">บริการดูแลหลังการขายอย่างอบอุ่น เปลี่ยนสินค้าได้ไร้กังวล</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalog Section -->
+  <main class="catalog-section" id="collection">
+    <div class="catalog-header">
+      <div class="catalog-header-top">
+        <div>
+          <h2 class="catalog-title">คอลเลกชันเครื่องแต่งกาย</h2>
+          <p class="catalog-subtitle">เลือกไอเทมชิ้นโปรดที่แมตช์เข้ากับเสื้อผ้าตัวเดิมได้อย่างลงตัว</p>
+        </div>
+        <div class="catalog-controls">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="catalog-search" class="search-input" placeholder="ค้นหาชื่อสินค้า เช่น เสื้อเชิ้ต..." aria-label="ค้นหาสินค้า">
+          </div>
+          <select id="catalog-sort" class="sort-select" aria-label="เรียงลำดับสินค้า">
+            <option value="featured">สินค้าแนะนำ</option>
+            <option value="price-low">ราคา: ต่ำไปสูง</option>
+            <option value="price-high">ราคา: สูงไปต่ำ</option>
+            <option value="name">ชื่อสินค้า (A - Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="category-bar">
+        <div class="category-filters" id="category-filters">
+          <!-- Dynamic Pills will render here -->
+        </div>
+        <span class="count-indicator" id="product-count-label">กำลังโหลดสินค้า...</span>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="product-grid">
+      <!-- Dynamic Products will render here -->
+    </div>
+  </main>
+
+  <!-- Editorial Lookbook Section -->
+  <section class="editorial-section" id="philosophy">
+    <div class="editorial-container">
+      <div class="editorial-art-frame" id="lookbook">
+        <svg viewBox="0 0 200 240" fill="none" class="editorial-art-svg">
+          <path d="M66 38 L100 60 L134 38 L170 82 L150 106 L138 98 L138 206 L62 206 L62 98 L50 106 L30 82 Z" fill="#CBBBA8" stroke="#74624F" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M88 40 L108 108 L100 206" stroke="#74624F" stroke-width="2"/>
+          <path d="M54 122 L146 122" stroke="#5A4838" stroke-width="4" stroke-linecap="round"/>
+          <rect x="94" y="119" width="12" height="10" rx="1.5" fill="#FAF6EE" stroke="#5A4838" stroke-width="2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="editorial-kicker">Design Philosophy</span>
+        <blockquote class="editorial-quote">
+          “ความงามที่แท้จริงไม่จำเป็นต้องส่งเสียงดัง เพียงแค่ความนิ่ง เรียบง่าย และพอดี”
+        </blockquote>
+        <p class="editorial-text">
+          เราเชื่อว่าเสื้อผ้าที่ดีคือสิ่งที่ทำให้คุณเป็นตัวของตัวเองอย่างสบายใจที่สุด AURA STUDIO จึงออกแบบคอลเลกชันบนพื้นฐานของความเรียบง่าย ใช้โทนสีที่มาจากทราย หิน และผืนดิน ไม่ตกยุคตามกระแสที่หมุนไว เพื่อให้เสื้อผ้าทุกชิ้นเป็นเพื่อนร่วมทางของคุณได้ในทุกๆ วัน
+        </p>
+        <a href="#collection" class="btn btn-primary">เลือกชมไอเทมประจำวัน</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="brand-name">AURA STUDIO</div>
+        <p class="footer-bio">
+          แบรนด์เสื้อผ้าสไตล์มินิมอลเพื่อการใช้ชีวิตในทุกวัน ตัดเย็บด้วยความใส่ใจและคำนึงถึงความสบายของผู้สวมใส่เป็นสำคัญ
+        </p>
+      </div>
+      <div>
+        <h4 class="footer-heading">หมวดหมู่</h4>
+        <ul class="footer-links">
+          <li><a href="#collection">เสื้อเชิ้ต & เสื้อยืด</a></li>
+          <li><a href="#collection">กางเกงขายาว & ขาสั้น</a></li>
+          <li><a href="#collection">เสื้อโค้ต & คาร์ดิแกน</a></li>
+          <li><a href="#collection">กระเป๋า & แอคเซสเซอรี่</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">ความช่วยเหลือ</h4>
+        <ul class="footer-links">
+          <li><a href="#">ตารางเทียบไซส์</a></li>
+          <li><a href="#">การจัดส่ง & นโยบายคืนสินค้า</a></li>
+          <li><a href="#">การดูแลรักษาผ้าลินิน</a></li>
+          <li><a href="#">คำถามที่พบบ่อย (FAQ)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">รับข่าวสารคอลเลกชันใหม่</h4>
+        <p style="font-size: 0.8125rem; color: #A3968B; margin-bottom: 0.5rem;">รับโค้ดส่วนลด 5% เมื่อสมัครรับจดหมายข่าว</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('ขอบพระคุณสำหรับการติดตามข่าวสารค่ะ');">
+          <input type="email" class="newsletter-input" placeholder="อีเมลของคุณ..." required aria-label="อีเมลสำหรับรับข่าวสาร">
+          <button type="submit" class="newsletter-btn">สมัคร</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2026 AURA STUDIO. All rights reserved. Minimal & Everyday Wear.</div>
+      <div>Bangkok, Thailand</div>
+    </div>
+  </footer>
+
+  <!-- Slide-out Cart Drawer -->
+  <div class="drawer-backdrop" id="drawer-backdrop" aria-hidden="true"></div>
+
+  <aside class="cart-drawer" id="cart-drawer" aria-label="ตะกร้าสินค้า" role="dialog" aria-modal="true">
+    <div class="cart-drawer-header">
+      <div class="drawer-title-group">
+        <h2 class="drawer-title">ตะกร้าของคุณ</h2>
+        <span class="drawer-count" id="cart-drawer-count">(0)</span>
+      </div>
+      <button type="button" class="btn-close-drawer" id="btn-close-cart" aria-label="ปิดตะกร้า">&times;</button>
+    </div>
+
+    <!-- Free Shipping Progress -->
+    <div class="free-shipping-meter">
+      <p class="free-shipping-text" id="free-shipping-text">
+        ช้อปอีกเพียง <strong>฿1,500</strong> เพื่อรับสิทธิ์ส่งฟรี
+      </p>
+      <div class="free-shipping-track">
+        <div class="free-shipping-fill" id="free-shipping-progress"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="cart-drawer-body" id="cart-items-container">
+      <!-- Dynamic cart items will render here -->
+    </div>
+
+    <!-- Cart Footer & Checkout -->
+    <div class="cart-drawer-footer">
+      <form class="promo-form" id="promo-form">
+        <input type="text" id="promo-input" class="promo-input" placeholder="โค้ดส่วนลด (เช่น AURA10)" aria-label="โค้ดส่วนลด">
+        <button type="submit" class="btn-promo-apply">ใช้โค้ด</button>
+      </form>
+      <div id="promo-feedback" class="promo-feedback"></div>
+
+      <div class="cart-calc-rows">
+        <div class="calc-row">
+          <span>ยอดรวมสินค้า</span>
+          <span id="cart-subtotal">฿0</span>
+        </div>
+        <div class="calc-row" id="cart-discount-row" style="display: none;">
+          <span class="text-discount">ส่วนลด</span>
+          <span class="text-discount" id="cart-discount">-฿0</span>
+        </div>
+        <div class="calc-row">
+          <span>ค่าจัดส่ง</span>
+          <span id="cart-shipping">฿0</span>
+        </div>
+        <div class="calc-row row-total">
+          <span>ยอดรวมทั้งสิ้น</span>
+          <span id="cart-total">฿0</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-checkout-primary" id="checkout-btn" disabled>
+        ดำเนินการสั่งซื้อสินค้า
+      </button>
+    </div>
+  </aside>
+
+  <!-- Quick View Modal -->
+  <div class="modal-wrapper" id="quick-view-modal" role="dialog" aria-modal="true" aria-label="ดูรายละเอียดสินค้า">
+    <div class="modal-container">
+      <button type="button" class="btn-close-modal" id="btn-close-quick-view" aria-label="ปิดหน้าต่าง">&times;</button>
+      <div id="quick-view-content">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Simulation Modal -->
+  <div class="modal-wrapper" id="checkout-modal" role="dialog" aria-modal="true" aria-label="ขั้นตอนการสั่งซื้อ">
+    <div class="modal-container checkout-modal-container">
+      <button type="button" class="btn-close-modal" id="btn-close-checkout" aria-label="ปิดหน้าต่างการสั่งซื้อ">&times;</button>
+      <div id="checkout-modal-content">
+        <h2 class="checkout-modal-title">ข้อมูลการจัดส่งและชำระเงิน</h2>
+        <p class="checkout-modal-desc">กรุณากรอกข้อมูลที่อยู่ในการจัดส่ง เพื่อดำเนินการสั่งซื้อสินค้า</p>
+
+        <div class="checkout-grid">
+          <form id="checkout-form">
+            <div class="form-group">
+              <label class="form-label" for="cust-name">ชื่อ - นามสกุล *</label>
+              <input type="text" id="cust-name" class="form-input" required placeholder="สมชาย ใจดี">
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="cust-phone">เบอร์โทรศัพท์ *</label>
+                <input type="tel" id="cust-phone" class="form-input" required placeholder="08X-XXX-XXXX">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cust-email">อีเมล *</label>
+                <input type="email" id="cust-email" class="form-input" required placeholder="example@email.com">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cust-address">ที่อยู่จัดส่งสินค้า *</label>
+              <textarea id="cust-address" class="form-textarea" rows="3" required placeholder="บ้านเลขที่, ถนน, แขวง/ตำบล, เขต/อำเภอ, จังหวัด, รหัสไปรษณีย์"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">วิธีการชำระเงิน</label>
+              <div class="payment-methods-box">
+                <label class="payment-radio-label">
+                  <input type="radio" name="payment-method" value="promptpay" checked>
+                  <span>พร้อมเพย์ QR Code (ไม่มีค่าธรรมเนียม)</span>
+                </label>
+                <label class="payment-radio-label">
+                  <input type="radio" name="payment-method" value="credit">
+                  <span>บัตรเครดิต / เดบิต (Visa, Mastercard)</span>
+                </label>
+                <label class="payment-radio-label">
+                  <input type="radio" name="payment-method" value="bank">
+                  <span>โอนเงินผ่านบัญชีธนาคาร</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.95rem;">
+              ยืนยันการสั่งซื้อ
+            </button>
+          </form>
+
+          <div id="checkout-order-summary">
+            <!-- Dynamic order summary -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
