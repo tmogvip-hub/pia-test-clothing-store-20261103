@@ -34,6 +34,19 @@ describe("AURA STUDIO — Catalog Data Integrity", () => {
     assert.ok(tops.every(item => item.category === "tops"));
   });
 
+  it("should filter products by size (S, M, L, XL)", () => {
+    const sItems = filterProducts({ size: "S" });
+    assert.ok(sItems.length > 0);
+    assert.ok(sItems.every(item => item.sizes.some(s => s === "S" || s.split("/").includes("S"))));
+
+    const xlItems = filterProducts({ size: "XL" });
+    assert.ok(xlItems.length > 0);
+    assert.ok(xlItems.every(item => item.sizes.some(s => s === "XL" || s.split("/").includes("XL"))));
+
+    const allItems = filterProducts({ size: "all" });
+    assert.strictEqual(allItems.length, PRODUCTS.length);
+  });
+
   it("should search products by keyword in English and Thai", () => {
     const searchEng = filterProducts({ searchQuery: "linen" });
     assert.ok(searchEng.length > 0);
@@ -151,6 +164,18 @@ describe("AURA STUDIO — Cart Logic & Price Calculations", () => {
     // Quantity <= 0 should remove the item
     const removed = updateCartQuantity(items, "k1", 0);
     assert.strictEqual(removed.length, 0);
+  });
+
+  it("should prevent NaN quantity in updateCartQuantity", () => {
+    const items = [{ key: "k1", price: 500, quantity: 2 }];
+    const resNaN = updateCartQuantity(items, "k1", NaN);
+    assert.strictEqual(resNaN[0].quantity, 2);
+
+    const resStr = updateCartQuantity(items, "k1", "not-a-number");
+    assert.strictEqual(resStr[0].quantity, 2);
+
+    const resUndef = updateCartQuantity(items, "k1", undefined);
+    assert.strictEqual(resUndef[0].quantity, 2);
   });
 
   it("should remove item from cart by key", () => {

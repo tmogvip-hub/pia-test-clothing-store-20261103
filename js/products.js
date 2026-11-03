@@ -166,6 +166,14 @@ export const CATEGORIES = [
   { id: "accessories", label: "กระเป๋า & เครื่องประดับ" }
 ];
 
+export const SIZES = [
+  { id: "all", label: "ทุกไซส์" },
+  { id: "S", label: "S" },
+  { id: "M", label: "M" },
+  { id: "L", label: "L" },
+  { id: "XL", label: "XL" }
+];
+
 export const PROMO_CODES = {
   AURA10: {
     discountPercent: 10,
@@ -191,11 +199,22 @@ export function getProductById(id) {
   return PRODUCTS.find(p => p.id === id) || null;
 }
 
-export function filterProducts({ category = "all", searchQuery = "", sort = "featured" }) {
+export function filterProducts({ category = "all", searchQuery = "", sort = "featured", size = "all" } = {}) {
   let list = [...PRODUCTS];
 
   if (category && category !== "all") {
     list = list.filter(item => item.category === category);
+  }
+
+  if (size && size !== "all") {
+    list = list.filter(item => {
+      if (!Array.isArray(item.sizes)) return false;
+      return item.sizes.some(s => {
+        if (s === size) return true;
+        const parts = s.split("/").map(p => p.trim());
+        return parts.includes(size);
+      });
+    });
   }
 
   if (searchQuery && searchQuery.trim() !== "") {

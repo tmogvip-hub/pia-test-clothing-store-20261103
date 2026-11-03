@@ -54,7 +54,7 @@
       <div class="hero-content">
         <span class="hero-tag">Everyday Capsule 2026</span>
         <h1 class="hero-title">
-          ความเรียบง่ายที่สวมใส่ได้จริง <em>ในทุกจังหวะชีวิต</em>
+          ลินินเบาสบาย <em style="color: #7A8B6F;">ใส่ได้ทุกวัน</em>
         </h1>
         <p class="hero-desc">
           คอลเลกชันเสื้อผ้าที่ผ่านการเลือกสรรเส้นใยธรรมชาติและเฉดสี Warm Sand & Oatmeal เพื่อให้คุณรู้สึกผ่อนคลาย สบายตัว และคงความสง่างามเหนือกาลเวลา
@@ -148,6 +148,13 @@
             </svg>
             <input type="text" id="catalog-search" class="search-input" placeholder="ค้นหาชื่อสินค้า เช่น เสื้อเชิ้ต..." aria-label="ค้นหาสินค้า">
           </div>
+          <select id="size-filter" class="sort-select size-select" aria-label="กรองไซส์">
+            <option value="all">ทุกไซส์</option>
+            <option value="S">ไซส์ S</option>
+            <option value="M">ไซส์ M</option>
+            <option value="L">ไซส์ L</option>
+            <option value="XL">ไซส์ XL</option>
+          </select>
           <select id="catalog-sort" class="sort-select" aria-label="เรียงลำดับสินค้า">
             <option value="featured">สินค้าแนะนำ</option>
             <option value="price-low">ราคา: ต่ำไปสูง</option>
@@ -162,6 +169,18 @@
           <!-- Dynamic Pills will render here -->
         </div>
         <span class="count-indicator" id="product-count-label">กำลังโหลดสินค้า...</span>
+      </div>
+
+      <!-- Size Filter Bar -->
+      <div class="size-filter-bar">
+        <span class="size-filter-label">ตัวกรองไซส์:</span>
+        <div class="size-filter-group" id="size-filters">
+          <button type="button" class="size-pill is-active" data-size="all">ทั้งหมด</button>
+          <button type="button" class="size-pill" data-size="S">S</button>
+          <button type="button" class="size-pill" data-size="M">M</button>
+          <button type="button" class="size-pill" data-size="L">L</button>
+          <button type="button" class="size-pill" data-size="XL">XL</button>
+        </div>
       </div>
     </div>
 

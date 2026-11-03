@@ -1,4 +1,4 @@
-import { PRODUCTS, CATEGORIES, filterProducts, getProductById } from "./products.js";
+import { PRODUCTS, CATEGORIES, SIZES, filterProducts, getProductById } from "./products.js";
 import {
   calculateCartTotals,
   addItemToCart,
@@ -12,6 +12,7 @@ const STORAGE_KEY = "aura_studio_cart_v1";
 // State
 let cart = loadCart();
 let activeCategory = "all";
+let activeSize = "all";
 let searchQuery = "";
 let currentSort = "featured";
 let activeCoupon = "";
@@ -19,6 +20,7 @@ let activeCoupon = "";
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   renderCategoryPills();
+  renderSizePills();
   renderProducts();
   updateCartUI();
   setupEventListeners();
@@ -54,6 +56,30 @@ function renderCategoryPills() {
       aria-pressed="${cat.id === activeCategory}"
     >
       ${cat.label}
+    </button>
+  `).join("");
+}
+
+function renderSizePills() {
+  const container = document.getElementById("size-filters");
+  if (!container) return;
+
+  const sizeOptions = [
+    { id: "all", label: "ทั้งหมด" },
+    { id: "S", label: "S" },
+    { id: "M", label: "M" },
+    { id: "L", label: "L" },
+    { id: "XL", label: "XL" }
+  ];
+
+  container.innerHTML = sizeOptions.map(s => `
+    <button
+      type="button"
+      class="size-pill ${s.id === activeSize ? 'is-active' : ''}"
+      data-size="${s.id}"
+      aria-pressed="${s.id === activeSize}"
+    >
+      ${s.label}
     </button>
   `).join("");
 }
@@ -157,7 +183,8 @@ function renderProducts() {
   const filtered = filterProducts({
     category: activeCategory,
     searchQuery: searchQuery,
-    sort: currentSort
+    sort: currentSort,
+    size: activeSize
   });
 
   if (countLabel) {
@@ -168,7 +195,7 @@ function renderProducts() {
     grid.innerHTML = `
       <div class="empty-state">
         <p class="empty-title">ไม่พบสินค้าที่คุณกำลังค้นหา</p>
-        <p class="empty-subtitle">ลองค้นหาด้วยคำอื่น หรือเลือกหมวดหมู่อื่นดูนะคะ</p>
+        <p class="empty-subtitle">ลองค้นหาด้วยคำอื่น หรือเลือกหมวดหมู่และไซส์อื่นดูนะคะ</p>
         <button type="button" class="btn btn-outline" id="reset-filter-btn">ดูสินค้าทั้งหมด</button>
       </div>
     `;
@@ -176,10 +203,14 @@ function renderProducts() {
     if (resetBtn) {
       resetBtn.addEventListener("click", () => {
         activeCategory = "all";
+        activeSize = "all";
         searchQuery = "";
         const searchInput = document.getElementById("catalog-search");
         if (searchInput) searchInput.value = "";
+        const sizeSelect = document.getElementById("size-filter");
+        if (sizeSelect) sizeSelect.value = "all";
         renderCategoryPills();
+        renderSizePills();
         renderProducts();
       });
     }
@@ -528,281 +559,4 @@ function openCheckoutModal() {
   const checkoutItemsContainer = document.getElementById("checkout-order-summary");
   const totals = calculateCartTotals(cart, activeCoupon);
 
-  if (!modal || !checkoutItemsContainer) return;
-
-  checkoutItemsContainer.innerHTML = `
-    <div class="checkout-summary-box">
-      <h3 class="summary-box-title">สรุปรายการสั่งซื้อ (${totals.totalCount} ชิ้น)</h3>
-      <div class="checkout-items-list">
-        ${cart.map(item => `
-          <div class="checkout-row-item">
-            <span>${item.name} (${item.color}, ${item.size}) × ${item.quantity}</span>
-            <span>฿${(item.price * item.quantity).toLocaleString("th-TH")}</span>
-          </div>
-        `).join("")}
-      </div>
-      <div class="checkout-calc-list">
-        <div class="checkout-calc-row">
-          <span>ยอดรวมสินค้า</span>
-          <span>฿${totals.subtotal.toLocaleString("th-TH")}</span>
-        </div>
-        ${totals.discount > 0 ? `
-          <div class="checkout-calc-row text-discount">
-            <span>ส่วนลด (${totals.appliedCoupon?.code})</span>
-            <span>-฿${totals.discount.toLocaleString("th-TH")}</span>
-          </div>
-        ` : ""}
-        <div class="checkout-calc-row">
-          <span>ค่าจัดส่ง</span>
-          <span>${totals.shipping === 0 ? "ฟรี" : `฿${totals.shipping}`}</span>
-        </div>
-        <div class="checkout-calc-total">
-          <strong>ยอดชำระสุทธิ</strong>
-          <strong class="total-highlight">฿${totals.total.toLocaleString("th-TH")}</strong>
-        </div>
-      </div>
-    </div>
-  `;
-
-  modal.classList.add("is-open");
-  document.body.classList.add("modal-open");
-}
-
-function closeCheckoutModal() {
-  const modal = document.getElementById("checkout-modal");
-  if (modal) {
-    modal.classList.remove("is-open");
-    document.body.classList.remove("modal-open");
-  }
-}
-
-function showToast(message) {
-  let toast = document.getElementById("app-toast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "app-toast";
-    toast.className = "toast";
-    document.body.appendChild(toast);
-  }
-
-  toast.textContent = message;
-  toast.classList.add("is-visible");
-
-  setTimeout(() => {
-    toast.classList.remove("is-visible");
-  }, 2800);
-}
-
-function setupEventListeners() {
-  // Category filter clicks
-  const categoryFilters = document.getElementById("category-filters");
-  if (categoryFilters) {
-    categoryFilters.addEventListener("click", (e) => {
-      const btn = e.target.closest(".filter-pill");
-      if (!btn) return;
-      activeCategory = btn.dataset.category;
-      renderCategoryPills();
-      renderProducts();
-    });
-  }
-
-  // Search input
-  const searchInput = document.getElementById("catalog-search");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      searchQuery = e.target.value;
-      renderProducts();
-    });
-  }
-
-  // Sort dropdown
-  const sortSelect = document.getElementById("catalog-sort");
-  if (sortSelect) {
-    sortSelect.addEventListener("change", (e) => {
-      currentSort = e.target.value;
-      renderProducts();
-    });
-  }
-
-  // Product Grid clicks (Delegation)
-  const productGrid = document.getElementById("product-grid");
-  if (productGrid) {
-    productGrid.addEventListener("click", (e) => {
-      const actionBtn = e.target.closest("[data-action]");
-      if (!actionBtn) return;
-
-      const action = actionBtn.dataset.action;
-      const id = actionBtn.dataset.id;
-      const product = getProductById(id);
-
-      if (action === "quick-view") {
-        openQuickView(id);
-      } else if (action === "add-to-cart") {
-        if (product) {
-          cart = addItemToCart(cart, product, product.sizes[0], product.colors[0].name, 1);
-          saveCart();
-          updateCartUI();
-          showToast(`เพิ่ม "${product.name}" ลงในตะกร้าแล้ว`);
-        }
-      }
-    });
-  }
-
-  // Cart Drawer open/close triggers
-  const openCartBtn = document.getElementById("btn-open-cart");
-  if (openCartBtn) {
-    openCartBtn.addEventListener("click", openCartDrawer);
-  }
-
-  const closeCartBtn = document.getElementById("btn-close-cart");
-  if (closeCartBtn) {
-    closeCartBtn.addEventListener("click", closeCartDrawer);
-  }
-
-  const backdrop = document.getElementById("drawer-backdrop");
-  if (backdrop) {
-    backdrop.addEventListener("click", () => {
-      closeCartDrawer();
-      closeQuickView();
-      closeCheckoutModal();
-    });
-  }
-
-  // Cart Item Actions (increase, decrease, remove)
-  const cartContainer = document.getElementById("cart-items-container");
-  if (cartContainer) {
-    cartContainer.addEventListener("click", (e) => {
-      const target = e.target.closest("[data-action]");
-      if (!target) return;
-
-      const action = target.dataset.action;
-      const key = target.dataset.key;
-      const existing = cart.find(i => i.key === key);
-
-      if (action === "increase-qty" && existing) {
-        cart = updateCartQuantity(cart, key, existing.quantity + 1);
-        saveCart();
-        updateCartUI();
-      } else if (action === "decrease-qty" && existing) {
-        cart = updateCartQuantity(cart, key, existing.quantity - 1);
-        saveCart();
-        updateCartUI();
-      } else if (action === "remove-item") {
-        cart = removeCartItem(cart, key);
-        saveCart();
-        updateCartUI();
-        showToast("นำสินค้าออกจากตะกร้าแล้ว");
-      }
-    });
-  }
-
-  // Promo Code Form
-  const promoForm = document.getElementById("promo-form");
-  const promoInput = document.getElementById("promo-input");
-  const promoFeedback = document.getElementById("promo-feedback");
-
-  if (promoForm && promoInput) {
-    promoForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const code = promoInput.value.trim().toUpperCase();
-      if (!code) return;
-
-      activeCoupon = code;
-      const totals = calculateCartTotals(cart, activeCoupon);
-
-      if (totals.appliedCoupon) {
-        promoFeedback.className = "promo-feedback is-success";
-        promoFeedback.textContent = `ใช้โค้ด ${code} สำเร็จ: ${totals.appliedCoupon.description}`;
-        updateCartUI();
-      } else {
-        activeCoupon = "";
-        promoFeedback.className = "promo-feedback is-error";
-        promoFeedback.textContent = "โค้ดส่วนลดนี้ไม่ถูกต้องหรือหมดอายุ (ลองใช้ AURA10 หรือ FREESHIP)";
-        updateCartUI();
-      }
-    });
-  }
-
-  // Checkout button inside Cart Drawer
-  const checkoutBtn = document.getElementById("checkout-btn");
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", () => {
-      if (cart.length === 0) return;
-      closeCartDrawer();
-      openCheckoutModal();
-    });
-  }
-
-  // Quick View Close
-  const closeQuickBtn = document.getElementById("btn-close-quick-view");
-  if (closeQuickBtn) {
-    closeQuickBtn.addEventListener("click", closeQuickView);
-  }
-
-  // Checkout Modal Close
-  const closeCheckoutBtn = document.getElementById("btn-close-checkout");
-  if (closeCheckoutBtn) {
-    closeCheckoutBtn.addEventListener("click", closeCheckoutModal);
-  }
-
-  // Checkout Form Submission Simulation
-  const checkoutForm = document.getElementById("checkout-form");
-  if (checkoutForm) {
-    checkoutForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const submitBtn = checkoutForm.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "กำลังดำเนินการสั่งซื้อ...";
-      }
-
-      setTimeout(() => {
-        const orderId = "AURA-" + Math.floor(100000 + Math.random() * 900000);
-        const buyerName = document.getElementById("cust-name")?.value || "คุณลูกค้า";
-
-        const checkoutContent = document.getElementById("checkout-modal-content");
-        if (checkoutContent) {
-          checkoutContent.innerHTML = `
-            <div class="order-success-card">
-              <div class="success-icon-badge">✓</div>
-              <h2 class="order-success-title">ขอบพระคุณสำหรับการสั่งซื้อค่ะ</h2>
-              <p class="order-success-msg">ทางแบรนด์ AURA STUDIO ได้รับคำสั่งซื้อของคุณ <strong>${buyerName}</strong> เรียบร้อยแล้ว</p>
-              <div class="order-id-box">
-                <span>หมายเลขคำสั่งซื้อของคุณ:</span>
-                <strong>${orderId}</strong>
-              </div>
-              <p class="order-delivery-note">เจ้าหน้าที่จะจัดเตรียมสินค้าและแจ้งเลขพัสดุให้คุณทราบผ่านอีเมล/SMS ภายใน 24 ชม. นะคะ</p>
-              <button type="button" class="btn btn-primary" id="btn-back-to-shop">เลือกซื้อสินค้าต่อ</button>
-            </div>
-          `;
-
-          const backBtn = document.getElementById("btn-back-to-shop");
-          if (backBtn) {
-            backBtn.addEventListener("click", () => {
-              cart = [];
-              activeCoupon = "";
-              saveCart();
-              updateCartUI();
-              closeCheckoutModal();
-              // reload page or clean state
-              window.location.reload();
-            });
-          }
-        }
-      }, 900);
-    });
-  }
-
-  // Smooth scroll for nav anchor
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", function (e) {
-      const targetId = this.getAttribute("href");
-      if (targetId === "#") return;
-      const targetEl = document.querySelector(targetId);
-      if (targetEl) {
-        e.preventDefault();
-        targetEl.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  });
-}
+  if (!modal || !checkoutItemsContainer) return;\n\n  checkoutItemsContainer.innerHTML = `\n    <div class="checkout-summary-box">\n      <h3 class="summary-box-title">สรุปรายการสั่งซื้อ (${totals.totalCount} ชิ้น)</h3>\n      <div class="checkout-items-list">\n        ${cart.map(item => `\n          <div class="checkout-row-item">\n            <span>${item.name} (${item.color}, ${item.size}) × ${item.quantity}</span>\n            <span>฿${(item.price * item.quantity).toLocaleString("th-TH")}</span>\n          </div>\n        `).join("")}\n      </div>\n      <div class="checkout-calc-list">\n        <div class="checkout-calc-row">\n          <span>ยอดรวมสินค้า</span>\n          <span>฿${totals.subtotal.toLocaleString("th-TH")}</span>\n        </div>\n        ${totals.discount > 0 ? `\n          <div class="checkout-calc-row text-discount">\n            <span>ส่วนลด (${totals.appliedCoupon?.code})</span>\n            <span>-฿${totals.discount.toLocaleString("th-TH")}</span>\n          </div>\n        ` : ""}\n        <div class="checkout-calc-row">\n          <span>ค่าจัดส่ง</span>\n          <span>${totals.shipping === 0 ? "ฟรี" : `฿${totals.shipping}`}</span>\n        </div>\n        <div class="checkout-calc-total">\n          <strong>ยอดชำระสุทธิ</strong>\n          <strong class="total-highlight">฿${totals.total.toLocaleString("th-TH")}</strong>\n        </div>\n      </div>\n    </div>\n  `;\n\n  modal.classList.add("is-open");\n  document.body.classList.add("modal-open");\n}\n\nfunction closeCheckoutModal() {\n  const modal = document.getElementById("checkout-modal");\n  if (modal) {\n    modal.classList.remove("is-open");\n    document.body.classList.remove("modal-open");\n  }\n}\n\nfunction showToast(message) {\n  let toast = document.getElementById("app-toast");\n  if (!toast) {\n    toast = document.createElement("div");\n    toast.id = "app-toast";\n    toast.className = "toast";\n    document.body.appendChild(toast);\n  }\n\n  toast.textContent = message;\n  toast.classList.add("is-visible");\n\n  setTimeout(() => {\n    toast.classList.remove("is-visible");\n  }, 2800);\n}\n\nfunction setupEventListeners() {\n  // Category filter clicks\n  const categoryFilters = document.getElementById("category-filters");\n  if (categoryFilters) {\n    categoryFilters.addEventListener("click", (e) => {\n      const btn = e.target.closest(".filter-pill");\n      if (!btn) return;\n      activeCategory = btn.dataset.category;\n      renderCategoryPills();\n      renderProducts();\n    });\n  }\n\n  // Size filter clicks\n  const sizeFilters = document.getElementById("size-filters");\n  if (sizeFilters) {\n    sizeFilters.addEventListener("click", (e) => {\n      const btn = e.target.closest(".size-pill");\n      if (!btn) return;\n      activeSize = btn.dataset.size || "all";\n      const sizeSelect = document.getElementById("size-filter");\n      if (sizeSelect) sizeSelect.value = activeSize;\n      renderSizePills();\n      renderProducts();\n    });\n  }\n\n  // Size filter select dropdown\n  const sizeSelect = document.getElementById("size-filter");\n  if (sizeSelect) {\n    sizeSelect.addEventListener("change", (e) => {\n      activeSize = e.target.value;\n      renderSizePills();\n      renderProducts();\n    });\n  }\n\n  // Search input\n  const searchInput = document.getElementById("catalog-search");\n  if (searchInput) {\n    searchInput.addEventListener("input", (e) => {\n      searchQuery = e.target.value;\n      renderProducts();\n    });\n  }\n\n  // Sort dropdown\n  const sortSelect = document.getElementById("catalog-sort");\n  if (sortSelect) {\n    sortSelect.addEventListener("change", (e) => {\n      currentSort = e.target.value;\n      renderProducts();\n    });\n  }\n\n  // Product Grid clicks (Delegation)\n  const productGrid = document.getElementById("product-grid");\n  if (productGrid) {\n    productGrid.addEventListener("click", (e) => {\n      const actionBtn = e.target.closest("[data-action]");\n      if (!actionBtn) return;\n\n      const action = actionBtn.dataset.action;\n      const id = actionBtn.dataset.id;\n      const product = getProductById(id);\n\n      if (action === "quick-view") {\n        openQuickView(id);\n      } else if (action === "add-to-cart") {\n        if (product) {\n          cart = addItemToCart(cart, product, product.sizes[0], product.colors[0].name, 1);\n          saveCart();\n          updateCartUI();\n          showToast(`เพิ่ม "${product.name}" ลงในตะกร้าแล้ว`);\n        }\n      }\n    });\n  }\n\n  // Cart Drawer open/close triggers\n  const openCartBtn = document.getElementById("btn-open-cart");\n  if (openCartBtn) {\n    openCartBtn.addEventListener("click", openCartDrawer);\n  }\n\n  const closeCartBtn = document.getElementById("btn-close-cart");\n  if (closeCartBtn) {\n    closeCartBtn.addEventListener("click", closeCartDrawer);\n  }\n\n  const backdrop = document.getElementById("drawer-backdrop");\n  if (backdrop) {\n    backdrop.addEventListener("click", () => {\n      closeCartDrawer();\n      closeQuickView();\n      closeCheckoutModal();\n    });\n  }\n\n  // Cart Item Actions (increase, decrease, remove)\n  const cartContainer = document.getElementById("cart-items-container");\n  if (cartContainer) {\n    cartContainer.addEventListener("click", (e) => {\n      const target = e.target.closest("[data-action]");\n      if (!target) return;\n\n      const action = target.dataset.action;\n      const key = target.dataset.key;\n      const existing = cart.find(i => i.key === key);\n\n      if (action === "increase-qty" && existing) {\n        const cur = parseInt(existing.quantity, 10);\n        const safeCur = Number.isNaN(cur) ? 1 : cur;\n        cart = updateCartQuantity(cart, key, safeCur + 1);\n        saveCart();\n        updateCartUI();\n      } else if (action === "decrease-qty" && existing) {\n        const cur = parseInt(existing.quantity, 10);\n        const safeCur = Number.isNaN(cur) ? 1 : cur;\n        cart = updateCartQuantity(cart, key, safeCur - 1);\n        saveCart();\n        updateCartUI();\n      } else if (action === "remove-item") {\n        cart = removeCartItem(cart, key);\n        saveCart();\n        updateCartUI();\n        showToast("นำสินค้าออกจากตะกร้าแล้ว");\n      }\n    });\n  }\n\n  // Promo Code Form\n  const promoForm = document.getElementById("promo-form");\n  const promoInput = document.getElementById("promo-input");\n  const promoFeedback = document.getElementById("promo-feedback");\n\n  if (promoForm && promoInput) {\n    promoForm.addEventListener("submit", (e) => {\n      e.preventDefault();\n      const code = promoInput.value.trim().toUpperCase();\n      if (!code) return;\n\n      activeCoupon = code;\n      const totals = calculateCartTotals(cart, activeCoupon);\n\n      if (totals.appliedCoupon) {\n        promoFeedback.className = "promo-feedback is-success";\n        promoFeedback.textContent = `ใช้โค้ด ${code} สำเร็จ: ${totals.appliedCoupon.description}`;\n        updateCartUI();\n      } else {\n        activeCoupon = "";\n        promoFeedback.className = "promo-feedback is-error";\n        promoFeedback.textContent = "โค้ดส่วนลดนี้ไม่ถูกต้องหรือหมดอายุ (ลองใช้ AURA10 หรือ FREESHIP)";\n        updateCartUI();\n      }\n    });\n  }\n\n  // Checkout button inside Cart Drawer\n  const checkoutBtn = document.getElementById("checkout-btn");\n  if (checkoutBtn) {\n    checkoutBtn.addEventListener("click", () => {\n      if (cart.length === 0) return;\n      closeCartDrawer();\n      openCheckoutModal();\n    });\n  }\n\n  // Quick View Close\n  const closeQuickBtn = document.getElementById("btn-close-quick-view");\n  if (closeQuickBtn) {\n    closeQuickBtn.addEventListener("click", closeQuickView);\n  }\n\n  // Checkout Modal Close\n  const closeCheckoutBtn = document.getElementById("btn-close-checkout");\n  if (closeCheckoutBtn) {\n    closeCheckoutBtn.addEventListener("click", closeCheckoutModal);\n  }\n\n  // Checkout Form Submission Simulation\n  const checkoutForm = document.getElementById("checkout-form");\n  if (checkoutForm) {\n    checkoutForm.addEventListener("submit", (e) => {\n      e.preventDefault();\n      const submitBtn = checkoutForm.querySelector('button[type="submit"]');\n      if (submitBtn) {\n        submitBtn.disabled = true;\n        submitBtn.textContent = "กำลังดำเนินการสั่งซื้อ...";\n      }\n\n      setTimeout(() => {\n        const orderId = "AURA-" + Math.floor(100000 + Math.random() * 900000);\n        const buyerName = document.getElementById("cust-name")?.value || "คุณลูกค้า";\n\n        const checkoutContent = document.getElementById("checkout-modal-content");\n        if (checkoutContent) {\n          checkoutContent.innerHTML = `\n            <div class="order-success-card">\n              <div class="success-icon-badge">✓</div>\n              <h2 class="order-success-title">ขอบพระคุณสำหรับการสั่งซื้อค่ะ</h2>\n              <p class="order-success-msg">ทางแบรนด์ AURA STUDIO ได้รับคำสั่งซื้อของคุณ <strong>${buyerName}</strong> เรียบร้อยแล้ว</p>\n              <div class="order-id-box">\n                <span>หมายเลขคำสั่งซื้อของคุณ:</span>\n                <strong>${orderId}</strong>\n              </div>\n              <p class="order-delivery-note">เจ้าหน้าที่จะจัดเตรียมสินค้าและแจ้งเลขพัสดุให้คุณทราบผ่านอีเมล/SMS ภายใน 24 ชม. นะคะ</p>\n              <button type="button" class="btn btn-primary" id="btn-back-to-shop">เลือกซื้อสินค้าต่อ</button>\n            </div>\n          `;\n\n          const backBtn = document.getElementById("btn-back-to-shop");\n          if (backBtn) {\n            backBtn.addEventListener("click", () => {\n              cart = [];\n              saveCart();\n              updateCartUI();\n              closeCheckoutModal();\n            });\n          }\n        }\n      }, 900);\n    });\n  }\n}\n

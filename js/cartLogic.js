@@ -104,9 +104,13 @@ export function addItemToCart(cart = [], product, size, color, quantity = 1) {
 
 /**
  * แก้ไขจำนวนสินค้าในตะกร้า
+ * ป้องกันไม่ให้ newQuantity ที่ไม่ใช่ตัวเลขหรือเป็น NaN ทำให้จำนวนในตะกร้ากลายเป็น NaN
  */
 export function updateCartQuantity(cart = [], key, newQuantity) {
   const qty = parseInt(newQuantity, 10);
+  if (Number.isNaN(qty)) {
+    return cart;
+  }
   if (qty <= 0) {
     return cart.filter(item => item.key !== key);
   }
