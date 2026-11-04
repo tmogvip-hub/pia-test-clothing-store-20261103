@@ -12,6 +12,7 @@ const STORAGE_KEY = "aura_studio_cart_v1";
 // State
 let cart = loadCart();
 let activeCategory = "all";
+let activeSize = "all";
 let searchQuery = "";
 let currentSort = "featured";
 let activeCoupon = "";
@@ -19,6 +20,7 @@ let activeCoupon = "";
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   renderCategoryPills();
+  renderSizePills();
   renderProducts();
   updateCartUI();
   setupEventListeners();
@@ -56,6 +58,47 @@ function renderCategoryPills() {
       ${cat.label}
     </button>
   `).join("");
+}
+
+function getAvailableSizes() {
+  const set = new Set();
+  PRODUCTS.forEach(p => {
+    if (Array.isArray(p.sizes)) {
+      p.sizes.forEach(s => set.add(s));
+    }
+  });
+  const order = ["XS", "S", "M", "L", "XL", "S/M", "L/XL", "One Size"];
+  const list = Array.from(set);
+  list.sort((a, b) => {
+    const idxA = order.indexOf(a);
+    const idxB = order.indexOf(b);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return a.localeCompare(b);
+  });
+  return ["all", ...list];
+}
+
+function renderSizePills() {
+  const container = document.getElementById("size-filters");
+  if (!container) return;
+
+  const sizes = getAvailableSizes();
+  container.innerHTML = sizes.map(size => {
+    const label = size === "all" ? "ทุกไซส์" : size;
+    const isActive = size === activeSize;
+    return `
+      <button
+        type="button"
+        class="size-pill ${isActive ? 'is-active' : ''}"
+        data-size="${size}"
+        aria-pressed="${isActive}"
+      >
+        ${label}
+      </button>
+    `;
+  }).join("");
 }
 
 function renderProductVisual(svgType, bg) {
@@ -154,11 +197,15 @@ function renderProducts() {
   const countLabel = document.getElementById("product-count-label");
   if (!grid) return;
 
-  const filtered = filterProducts({
+  let filtered = filterProducts({
     category: activeCategory,
     searchQuery: searchQuery,
     sort: currentSort
   });
+
+  if (activeSize && activeSize !== "all") {
+    filtered = filtered.filter(item => Array.isArray(item.sizes) && item.sizes.includes(activeSize));
+  }
 
   if (countLabel) {
     countLabel.textContent = `แสดง ${filtered.length} รายการ`;
@@ -176,10 +223,12 @@ function renderProducts() {
     if (resetBtn) {
       resetBtn.addEventListener("click", () => {
         activeCategory = "all";
+        activeSize = "all";
         searchQuery = "";
         const searchInput = document.getElementById("catalog-search");
         if (searchInput) searchInput.value = "";
         renderCategoryPills();
+        renderSizePills();
         renderProducts();
       });
     }
@@ -602,6 +651,18 @@ function setupEventListeners() {
       if (!btn) return;
       activeCategory = btn.dataset.category;
       renderCategoryPills();
+      renderProducts();
+    });
+  }
+
+  // Size pill filter clicks
+  const sizeFilters = document.getElementById("size-filters");
+  if (sizeFilters) {
+    sizeFilters.addEventListener("click", (e) => {
+      const btn = e.target.closest(".size-pill");
+      if (!btn) return;
+      activeSize = btn.dataset.size;
+      renderSizePills();
       renderProducts();
     });
   }
