@@ -1500,6 +1500,14 @@ a {
   gap: 0.5rem;
 }
 
+.footer-heading {
+  color: #e8772e;
+}
+
+.site-footer .footer-heading {
+  color: #e8772e;
+}
+
 .checkout-calc-list {
   border-top: 1px solid var(--color-border);
   padding-top: 0.75rem;
